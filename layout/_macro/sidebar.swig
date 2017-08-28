@@ -40,9 +40,13 @@
         </div>
         <nav class="site-state motion-element">
 
-          {% if config.archive_dir != '/' %}
+          {% if config.archive_dir != '/' and site.posts.length > 0 %}
             <div class="site-state-item site-state-posts">
+            {% if theme.menu.archives %}
               <a href="{{ url_for(theme.menu.archives) }}">
+            {% else %}
+              <a href="{{ url_for(config.archive_dir) }}">
+            {% endif %}
                 <span class="site-state-item-count">{{ site.posts.length }}</span>
                 <span class="site-state-item-name">{{ __('state.posts') }}</span>
               </a>
@@ -86,9 +90,9 @@
           {% if theme.social %}
             {% for name, link in theme.social %}
               <span class="links-of-author-item">
-                <a href="{{ link }}" target="_blank" title="{{ name }}">
+                <a href="{{ link.split('||')[0] | trim }}" target="_blank" title="{{ name }}">
                   {% if theme.social_icons.enable %}
-                    <i class="fa fa-fw fa-{{ theme.social_icons[name] | default('globe') | lower }}"></i>
+                    <i class="fa fa-fw fa-{{ link.split('||')[1] | trim | default('globe') }}"></i>
                   {% endif %}
                     {% if not theme.social_icons.icons_only %}
                       {{ name }}
